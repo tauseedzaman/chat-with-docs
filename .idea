@@ -1,0 +1,17 @@
+User
+  ↓
+Web UI (Chat)
+  ↓
+FastAPI Backend
+  ↓
+Document Loader
+  ↓
+Embedding Model (nomic-embed-text)
+  ↓
+ChromaDB Vector Store
+  ↓
+Retriever
+  ↓
+LLM (Ollama)
+  ↓
+Answer
