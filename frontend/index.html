@@ -102,6 +102,32 @@
             border-bottom-left-radius: 4px;
         }
 
+        .sources {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .source-tag {
+            font-size: 0.75rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 2px 8px;
+            border-radius: 100px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .source-tag i {
+            font-style: normal;
+            opacity: 0.7;
+        }
+
         .input-area {
             padding: 24px;
             border-top: 1px solid var(--glass-border);
@@ -233,10 +259,30 @@
         const btnText = document.getElementById('btn-text');
         const loader = document.getElementById('loader');
 
-        function addMessage(text, isUser = false) {
+        function addMessage(text, isUser = false, sources = []) {
             const msg = document.createElement('div');
             msg.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
-            msg.innerText = text;
+            
+            // Main text
+            const textContent = document.createElement('div');
+            textContent.innerText = text;
+            msg.appendChild(textContent);
+
+            // Sources
+            if (sources && sources.length > 0) {
+                const sourcesDiv = document.createElement('div');
+                sourcesDiv.className = 'sources';
+                
+                sources.forEach(source => {
+                    const tag = document.createElement('span');
+                    tag.className = 'source-tag';
+                    tag.innerHTML = `<i>📄</i> ${source}`;
+                    sourcesDiv.appendChild(tag);
+                });
+                
+                msg.appendChild(sourcesDiv);
+            }
+
             chatContainer.appendChild(msg);
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
@@ -260,7 +306,7 @@
                     body: JSON.stringify({ message: text })
                 });
                 const data = await response.json();
-                addMessage(data.answer || "Sorry, I couldn't process that.");
+                addMessage(data.answer || "Sorry, I couldn't process that.", false, data.sources);
             } catch (err) {
                 addMessage("Error connecting to backend. Make sure FastAPI is running.");
             } finally {
