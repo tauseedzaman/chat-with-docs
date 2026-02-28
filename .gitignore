@@ -69,3 +69,25 @@ Thumbs.db
 # =========================
 models/
 *.bin
+
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Env
+.env
+
+# Local data
+backend/data/chroma/
+backend/data/uploads/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
