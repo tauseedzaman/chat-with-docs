@@ -33,4 +33,14 @@ uvicorn app.main:app --reload
 Simply open `frontend/simple-chat-ui.html` in your browser.
 
 ## 📂 Project Structure
-Refer to the `Perfect Repo Structure` in the design document for details.
+- `backend/`: FastAPI application.
+- `data/`: Local storage for ChromaDB and uploads (Git-ignored).
+- `examples/sample_docs/`: Sample documents for testing.
+- `frontend/`: Simple web UI.
+
+## 📄 Sample Documents
+We've included sample documents to help you test the RAG flow immediately:
+- `examples/sample_docs/project-overview.txt`: A summary of this project.
+- `examples/sample_docs/tauseed-info.txt`: Information about the creator.
+
+Simply upload these files through the UI to start chatting!

@@ -14,8 +14,8 @@ def ingest_document(file_path: str):
     documents = loader.load()
     
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=800,
-        chunk_overlap= 150
+        chunk_size=settings.CHUNK_SIZE,
+        chunk_overlap=settings.CHUNK_OVERLAP
     )
     splits = text_splitter.split_documents(documents)
     

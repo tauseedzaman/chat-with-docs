@@ -22,8 +22,9 @@ venv/
 # =========================
 # Data & Vector DB
 # =========================
-data/*
-!data/**/.gitkeep
+**/data/*
+!**/data/
+!**/data/**/.gitkeep
 **/chroma/*
 !**/chroma/.gitkeep
 **/uploads/*

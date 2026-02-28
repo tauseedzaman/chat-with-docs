@@ -1,0 +1,22 @@
+# Chat with Docs - Project Overview
+
+Chat with Docs is a local-first Retrieval-Augmented Generation (RAG) application that allows you to interact with your documents privately using Large Language Models (LLMs).
+
+## Core Technologies
+- **FastAPI**: A modern, fast web framework for building APIs with Python.
+- **LangChain**: A framework for developing applications powered by language models.
+- **ChromaDB**: An open-source vector database for storing and retrieving document embeddings.
+- **Ollama**: A tool for running large language models locally.
+- **Nomic Embeddings**: High-performance embeddings for text retrieval.
+
+## Key Features
+1. **Local Privacy**: No data leaves your machine. Your documents and queries are processed locally.
+2. **Flexible Documents**: Supports both PDF and TXT files for ingestion.
+3. **Conversational Interface**: Ask questions about your documents in natural language.
+4. **Vector Search**: Uses semantic search to find the most relevant parts of your documents.
+
+## How to Test
+1. Upload a document via the `/upload` endpoint or the frontend.
+2. Wait for the injection process to complete.
+3. Ask questions related to the document content via the `/chat` endpoint.
+4. Observe how the system retrieves relevant chunks and generates an answer.
