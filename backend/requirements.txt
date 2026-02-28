@@ -6,5 +6,6 @@ langchain-ollama
 chromadb
 python-multipart
 pydantic-settings
+langchain-text-splitters
 pypdf
 python-dotenv

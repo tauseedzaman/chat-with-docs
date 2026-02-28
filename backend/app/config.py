@@ -5,11 +5,13 @@ class Settings(BaseSettings):
     OLLAMA_BASE_URL: str = "http://localhost:11434"
     EMBEDDING_MODEL: str = "nomic-embed-text"
     LLM_MODEL: str = "llama3"
-    CHROMA_DB_DIR: str = "data/chroma"
-    UPLOAD_DIR: str = "data/uploads"
+    
+    BASE_DIR: Path = Path(__file__).resolve().parent.parent.parent
+    CHROMA_DB_DIR: str = str(BASE_DIR / "data" / "chroma")
+    UPLOAD_DIR: str = str(BASE_DIR / "data" / "uploads")
 
     class Config:
-        env_file = ".env"
+        env_file = str(Path(__file__).resolve().parent.parent.parent / ".env")
 
 settings = Settings()
 

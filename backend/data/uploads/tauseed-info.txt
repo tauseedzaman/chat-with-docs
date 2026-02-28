@@ -1,0 +1,48 @@
+Title: About Tauseed Zaman
+
+Tauseed Zaman is a full-stack developer and AI builder from Pakistan. 
+He focuses on building practical software products that combine web development, automation, artificial intelligence, and blockchain technologies.
+
+He is the creator of TheBenefactor.net, a crypto-centric social platform designed around the idea of “Pay It Forward.” The platform allows users to earn rewards by completing tasks, contributing content, and participating in community activities powered by blockchain transparency.
+
+Tauseed primarily works with Laravel for backend development and frequently builds interactive user interfaces using Blade, Livewire, JavaScript, and modern frontend tooling. He also develops automation systems using Python.
+
+His technical interests include:
+- Artificial Intelligence
+- Retrieval Augmented Generation (RAG)
+- Local LLM systems using Ollama
+- Vector databases such as ChromaDB
+- Crypto analytics platforms
+- Developer productivity tools
+- Automation and DevOps workflows
+
+He has built several side projects including:
+1. DealTask – a CRM and proposal generation system for freelancers.
+2. Bookmark Buddy – a browser extension that helps developers save and organize useful technical resources.
+3. Crypto Insight Engine – an automated system that analyzes cryptocurrency market data and publishes insights.
+4. X Auto Reply Bot – an AI-powered automation tool for social media engagement.
+
+Tauseed believes modern software should reduce noise and help users focus on meaningful signals rather than overwhelming data.
+
+He actively shares development progress, experiments, and learnings on social media platforms to help other developers learn from real-world building experiences.
+
+His current focus is building open-source AI tools that run locally without requiring expensive cloud APIs, allowing developers and small teams to maintain privacy and control over their data.
+
+Skills:
+- PHP / Laravel
+- Python
+- FastAPI
+- JavaScript
+- AI Chatbot Development
+- RAG Systems
+- REST APIs
+- Redis
+- Docker
+- Linux Server Management
+
+Goals:
+Tauseed aims to build developer-friendly AI tools and scalable platforms that empower online communities and creators through automation and decentralized technologies.
+
+Contact:
+GitHub: github.com/tauseedzaman
+Platform: thebenefactor.net

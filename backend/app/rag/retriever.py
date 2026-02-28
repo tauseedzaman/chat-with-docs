@@ -1,6 +1,6 @@
-from langchain.chains import create_retrieval_chain
-from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnablePassthrough
+from langchain_core.output_parsers import StrOutputParser
 from langchain_community.vectorstores import Chroma
 from app.rag.embeddings import get_embeddings
 from app.rag.llm import get_llm
@@ -32,7 +32,14 @@ def get_rag_chain():
         ]
     )
     
-    question_answer_chain = create_stuff_documents_chain(llm, prompt)
-    rag_chain = create_retrieval_chain(retriever, question_answer_chain)
+    def format_docs(docs):
+        return "\n\n".join(doc.page_content for doc in docs)
+    
+    rag_chain = (
+        {"context": retriever | format_docs, "input": RunnablePassthrough()}
+        | prompt
+        | llm
+        | StrOutputParser()
+    )
     
     return rag_chain

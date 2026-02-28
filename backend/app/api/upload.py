@@ -20,4 +20,6 @@ async def upload_document(file: UploadFile = File(...)):
         ingest_document(file_path)
         return {"filename": file.filename, "status": "Injected successfully"}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        import traceback
+        error_details = f"{str(e)}\n{traceback.format_exc()}"
+        raise HTTPException(status_code=500, detail=f"Error during ingestion: {error_details}")

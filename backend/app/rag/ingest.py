@@ -9,13 +9,13 @@ def ingest_document(file_path: str):
     if file_path.endswith(".pdf"):
         loader = PyPDFLoader(file_path)
     else:
-        loader = TextLoader(file_path)
+        loader = TextLoader(file_path, encoding="utf-8")
     
     documents = loader.load()
     
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000,
-        chunk_overlap=200
+        chunk_size=800,
+        chunk_overlap= 150
     )
     splits = text_splitter.split_documents(documents)
     
