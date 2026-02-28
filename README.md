@@ -1,5 +1,7 @@
 # 🚀 Chat with Docs
 
+<img width="1080" height="601" alt="image" src="https://github.com/user-attachments/assets/1622bf67-69c6-4840-aff8-8a1551776a96" />
+
 A local-first RAG chatbot. Upload documents and ask questions grounded in your data.
 
 ## 🛠️ Stack
