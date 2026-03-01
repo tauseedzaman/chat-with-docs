@@ -22,9 +22,9 @@ def ingest_document(file_path: str):
     for i, split in enumerate(splits):
         split.metadata["chunk"] = i
     
-    vectorstore = Chroma.from_documents(
-        documents=splits,
-        embedding=get_embeddings(),
-        persist_directory=settings.CHROMA_DB_DIR
+    vectorstore = Chroma(
+        persist_directory=settings.CHROMA_DB_DIR,
+        embedding_function=get_embeddings()
     )
+    vectorstore.add_documents(splits)
     return vectorstore
