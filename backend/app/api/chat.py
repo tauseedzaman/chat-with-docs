@@ -1,7 +1,10 @@
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-from app.rag.retriever import get_rag_chain
+from app.rag.retriever import get_rag_components
 import os
+import json
+import asyncio
 
 router = APIRouter()
 
@@ -11,14 +14,13 @@ class ChatRequest(BaseModel):
 @router.post("/chat")
 async def chat(request: ChatRequest):
     try:
-        rag_chain = get_rag_chain()
-        result = rag_chain.invoke(request.message)
-        answer = result.get("answer", "")
-        docs = result.get("raw_context", [])
+        retriever, prompt, llm = get_rag_components()
+        
+        # 1. Get documents first for sources
+        docs = await retriever.ainvoke(request.message)
         
         sources_list = []
         seen_sources = set()
-        
         for doc in docs:
             source_name = os.path.basename(doc.metadata.get("source", "Unknown"))
             page = doc.metadata.get("page")
@@ -33,10 +35,25 @@ async def chat(request: ChatRequest):
             if source_label not in seen_sources:
                 sources_list.append(source_label)
                 seen_sources.add(source_label)
+
+        # 2. Prepare context for the prompt
+        context_text = "\n\n".join(doc.page_content for doc in docs)
         
-        return {
-            "answer": answer,
-            "sources": sources_list
-        }
+        async def event_generator():
+            # Send sources first
+            yield json.dumps({"sources": sources_list}) + "\n"
+            
+            # Send answer tokens
+            chain = prompt | llm
+            async for chunk in chain.astream({"input": request.message, "context": context_text}):
+                # Extract text from the chunk (depends on LLM type, but StrOutputParser or direct access work)
+                content = chunk.content if hasattr(chunk, 'content') else str(chunk)
+                if content:
+                    yield json.dumps({"answer": content}) + "\n"
+
+        return StreamingResponse(event_generator(), media_type="application/x-ndjson")
+        
     except Exception as e:
+        import traceback
+        print(traceback.format_exc())
         raise HTTPException(status_code=500, detail=str(e))

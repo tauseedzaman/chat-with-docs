@@ -6,14 +6,14 @@ from app.rag.embeddings import get_embeddings
 from app.rag.llm import get_llm
 from app.config import settings
 
-def get_rag_chain():
+def get_rag_components():
     vectorstore = Chroma(
         persist_directory=settings.CHROMA_DB_DIR,
         embedding_function=get_embeddings()
     )
     
     retriever = vectorstore.as_retriever()
-    llm = get_llm()
+    llm = get_llm(streaming=True)
     
     system_prompt = (
         "You are an assistant for question-answering tasks. Your name is DudeX2. "
@@ -33,6 +33,11 @@ def get_rag_chain():
         ]
     )
     
+    return retriever, prompt, llm
+
+def get_rag_chain():
+    retriever, prompt, llm = get_rag_components()
+    
     def format_docs(docs):
         return "\n\n".join(doc.page_content for doc in docs)
     
@@ -40,7 +45,7 @@ def get_rag_chain():
         {
             "context": retriever | format_docs, 
             "input": RunnablePassthrough(),
-            "raw_context": retriever  # Extra field to get the original objects
+            "raw_context": retriever
         }
         | RunnablePassthrough.assign(
             answer = prompt | llm | StrOutputParser()

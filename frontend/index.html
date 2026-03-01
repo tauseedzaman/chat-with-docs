@@ -357,20 +357,75 @@
             loader.style.display = 'block';
             sendBtn.disabled = true;
 
+            // Create bot message element
+            const botMsg = document.createElement('div');
+            botMsg.className = 'message bot-message';
+            const botContent = document.createElement('div');
+            botMsg.appendChild(botContent);
+            chatContainer.appendChild(botMsg);
+
+            let fullAnswer = "";
+            let sources = [];
+
             try {
                 const response = await fetch(`${API_BASE}/chat`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ message: text })
                 });
-                const data = await response.json();
-                addMessage(data.answer || "Sorry, I couldn't process that.", false, data.sources);
+
+                if (!response.ok) throw new Error("Backend error");
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = "";
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split("\n");
+                    buffer = lines.pop(); // Keep partial line in buffer
+
+                    for (const line of lines) {
+                        if (!line.trim()) continue;
+                        try {
+                            const data = JSON.parse(line);
+                            if (data.sources) {
+                                sources = data.sources;
+                            }
+                            if (data.answer) {
+                                fullAnswer += data.answer;
+                                botContent.innerHTML = marked.parse(fullAnswer);
+                                chatContainer.scrollTop = chatContainer.scrollHeight;
+                            }
+                        } catch (e) {
+                            console.error("Error parsing partial chunk", e, line);
+                        }
+                    }
+                }
+
+                // Append sources if any
+                if (sources.length > 0) {
+                    const sourcesDiv = document.createElement('div');
+                    sourcesDiv.className = 'sources';
+                    sources.forEach(source => {
+                        const tag = document.createElement('span');
+                        tag.className = 'source-tag';
+                        tag.innerHTML = `<i>📄</i> ${source}`;
+                        sourcesDiv.appendChild(tag);
+                    });
+                    botMsg.appendChild(sourcesDiv);
+                }
+
             } catch (err) {
-                addMessage("Error connecting to backend. Make sure FastAPI is running.");
+                botContent.innerText = "Error connecting to backend. Make sure FastAPI is running.";
             } finally {
                 btnText.style.display = 'block';
                 loader.style.display = 'none';
                 sendBtn.disabled = false;
+                chatContainer.scrollTop = chatContainer.scrollHeight;
             }
         }
 
