@@ -19,6 +19,9 @@ def ingest_document(file_path: str):
     )
     splits = text_splitter.split_documents(documents)
     
+    for i, split in enumerate(splits):
+        split.metadata["chunk"] = i
+    
     vectorstore = Chroma.from_documents(
         documents=splits,
         embedding=get_embeddings(),

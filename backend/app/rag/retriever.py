@@ -36,10 +36,14 @@ def get_rag_chain():
         return "\n\n".join(doc.page_content for doc in docs)
     
     rag_chain = (
-        {"context": retriever | format_docs, "input": RunnablePassthrough()}
-        | prompt
-        | llm
-        | StrOutputParser()
+        {
+            "context": retriever | format_docs, 
+            "input": RunnablePassthrough(),
+            "raw_context": retriever  # Extra field to get the original objects
+        }
+        | RunnablePassthrough.assign(
+            answer = prompt | llm | StrOutputParser()
+        )
     )
     
     return rag_chain
